@@ -3,30 +3,45 @@ import * as BooksAPI from './BooksAPI'
 import { Route } from 'react-router-dom'
 import BookSearch from './components/BookSearch.js';
 import ListBooks from './components/ListBooks.js';
-import './App.css'
+import './App.css';
+import _ from 'lodash';
 
 class BooksApp extends Component {
   
   state = {
     books : [],
+    listAllCategoriesBooks: []
   }
 
   componentDidMount() {
     BooksAPI.getAll()
     .then(books => {
-      this.setState({books});
+      this.updateBooks(books);
     })
   }
 
-  changeShelf= (book, shelf) => {
+  changeShelf = (book, shelf) => {
     BooksAPI.update(book, shelf)
     .then(() => {
       let referenceBooks = this.state.books;
-      let refIndex = referenceBooks.findIndex(refBook => refBook.id === book.id);
+      let refIndex = referenceBooks.findIndex(refBook => 
+        refBook.id === book.id);
       referenceBooks[refIndex].shelf = shelf;
-      this.setState({books : referenceBooks});
+      this.updateBooks(referenceBooks);
     })
   }
+
+  updateBooks = (books) => {
+    this.setState({books})
+  }
+
+  getAllBooksFromApi = _.debounce((query) => {
+    BooksAPI.search(query).then(books => {
+      if (books instanceof Array) {
+        this.setState({ listAllCategoriesBooks: books });
+      } 
+    });
+  }, 500);
 
   render() {
     return (
@@ -38,7 +53,10 @@ class BooksApp extends Component {
         />
       )} />
       <Route path='/search' render={() => (
-        <BookSearch />
+        <BookSearch 
+          books={this.state.listAllCategoriesBooks} 
+          getAllBooksFromApi={this.getAllBooksFromApi}
+        />
       )} />
       </div>
     )
