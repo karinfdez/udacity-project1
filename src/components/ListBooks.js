@@ -24,7 +24,7 @@ const BookShelf = (props) => {
     }
     const { currentlyReading, wantToRead, read } = categories;
 
-    books.map(book => {
+    books.forEach(book => {
         if(book.shelf === currentlyReading.bookCategory) {
             currentlyReadingArray.push(book);
         } else if(book.shelf === wantToRead.bookCategory) {
