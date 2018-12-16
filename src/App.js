@@ -36,10 +36,13 @@ class BooksApp extends Component {
   }
 
   getAllBooksFromApi = _.debounce((query) => {
-    BooksAPI.search(query).then(books => {
+    BooksAPI.search(query)
+    .then(books => {
       if (books instanceof Array) {
         this.setState({ listAllCategoriesBooks: books });
-      } 
+      } else {
+        this.setState({ listAllCategoriesBooks: [] });
+      }
     });
   }, 500);
 
@@ -56,6 +59,7 @@ class BooksApp extends Component {
         <BookSearch 
           books={this.state.listAllCategoriesBooks} 
           getAllBooksFromApi={this.getAllBooksFromApi}
+          changeShelf={this.changeShelf}
         />
       )} />
       </div>
