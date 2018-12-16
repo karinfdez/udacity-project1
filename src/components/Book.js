@@ -38,7 +38,6 @@ class Book extends Component {
             </div>
        )
     }
-   
 }
 
 Book.propTypes = {
