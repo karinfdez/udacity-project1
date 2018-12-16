@@ -6,17 +6,9 @@ import ListBooks from './components/ListBooks.js';
 import './App.css'
 
 class BooksApp extends Component {
-  constructor(props) {
-    super(props);
-    this.readingNow = [];
-    this.wantToRead = [];
-    this.read = [];
-  }
+  
   state = {
     books : [],
-    currentlyReading: 'currentlyReading',
-    wantToRead: 'wantToRead',
-    read: 'read'
   }
 
   componentDidMount() {
@@ -26,11 +18,22 @@ class BooksApp extends Component {
     })
   }
 
+  changeShelf= (book, shelf) => {
+    BooksAPI.update(book, shelf)
+    .then(categoryObj => {
+      console.log(categoryObj);
+      console.log('book id', book.id);
+      // this.state.books.map(book => {
+      //   console.log('book', book);
+      // })
+    })
+  }
+
   render() {
     return (
       <div className="app">
       <Route exact path='/' render={() => (
-        <ListBooks {...this.state} />
+        <ListBooks books={this.state.books} changeShelf={this.changeShelf}/>
       )} />
       <Route path='/search' render={() => (
         <BookSearch />
