@@ -6,7 +6,6 @@ class Book extends Component {
     state = {
         shelf: this.props.book.shelf
     }
-
     updateShelf = (e) => {
         this.setState({shelf: e.target.value}, () => {
             this.props.changeShelf(this.props.book, this.state.shelf);
@@ -32,7 +31,8 @@ class Book extends Component {
                     </div>
                 </div>
                 <div className="book-title">{title}</div>
-                {authors && typeof authors === 'object' && authors.length > 0 && authors.map((author,index) => (
+                {authors && typeof authors === 'object' && authors.length > 0 && 
+                authors.map((author,index) => (
                     <div key={`${author}-${index}`}className="book-authors">{author}</div>
                 ))}
             </div>
