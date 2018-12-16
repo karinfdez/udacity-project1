@@ -20,18 +20,11 @@ class BooksApp extends Component {
 
   changeShelf= (book, shelf) => {
     BooksAPI.update(book, shelf)
-    .then(categoryObj => {
-      console.log(categoryObj);
-      // console.log(categoryObj);
-      // console.log('book id', book.id);
-      // Object.keys(categoryObj).map(key => {
-      //   categoryObj[key].map(bookId => {
-
-      //   })
-      // })
-      // this.state.books.map(book => {
-      //   console.log('book', book);
-      // })
+    .then(() => {
+      let referenceBooks = this.state.books;
+      let refIndex = referenceBooks.findIndex(refBook => refBook.id === book.id);
+      referenceBooks[refIndex].shelf = shelf;
+      this.setState({books : referenceBooks});
     })
   }
 
@@ -39,7 +32,10 @@ class BooksApp extends Component {
     return (
       <div className="app">
       <Route exact path='/' render={() => (
-        <ListBooks books={this.state.books} changeShelf={this.changeShelf}/>
+        <ListBooks 
+          books={this.state.books} 
+          changeShelf={this.changeShelf}
+        />
       )} />
       <Route path='/search' render={() => (
         <BookSearch />
