@@ -1,19 +1,36 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import BookCategory from './BookCategory';
+import PropTypes from 'prop-types';
 
 const BookShelf = (props) => {
-    let currentlyReading = [];
-    let wantToRead = [];
-    let read = [];
+    const {books, changeShelf} = props;
+    let currentlyReadingArray = [];
+    let wantToReadArray = [];
+    let readArray = [];
+    let categories = {
+        currentlyReading: {
+            bookCategory: 'currentlyReading',
+            name: 'Currently Reading'
+        },
+        wantToRead: {
+            bookCategory: 'wantToRead',
+            name: 'Want to Read'
+        },
+        read: {
+            bookCategory: 'read',
+            name: 'Read'
+        }
+    }
+    const { currentlyReading, wantToRead, read } = categories;
 
-    props.books.map(book => {
-        if(book.shelf === props.currentlyReading) {
-            currentlyReading.push(book);
-        } else if(book.shelf === props.wantToRead) {
-            wantToRead.push(book);
+    books.map(book => {
+        if(book.shelf === currentlyReading.bookCategory) {
+            currentlyReadingArray.push(book);
+        } else if(book.shelf === wantToRead.bookCategory) {
+            wantToReadArray.push(book);
         } else {
-            read.push(book);
+            readArray.push(book);
         }
     })
 
@@ -24,9 +41,21 @@ const BookShelf = (props) => {
             </div>
             <div className="list-books-content">
             <div>
-                <BookCategory booksCategory={currentlyReading} category='Currently Reading'/>
-                <BookCategory booksCategory={wantToRead} category='Want to Read'/>
-                <BookCategory booksCategory={read} category='Read' />
+                <BookCategory 
+                    changeShelf={changeShelf} 
+                    booksCategory={currentlyReadingArray} 
+                    category={currentlyReading.name}
+                />
+                <BookCategory 
+                    changeShelf={changeShelf} 
+                    booksCategory={wantToReadArray} 
+                    category={wantToRead.name}
+                />
+                <BookCategory 
+                    changeShelf={changeShelf} 
+                    booksCategory={readArray} 
+                    category={read.name} 
+                />
             </div>
             </div>
             <div className="open-search">
@@ -36,6 +65,10 @@ const BookShelf = (props) => {
             </div>
         </div>
     )
+}
+
+BookShelf.propTypes = {
+    books: PropTypes.array.isRequired
 }
 
 export default BookShelf;
