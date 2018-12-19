@@ -1,15 +1,30 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import Book from './Book';
+import _ from 'lodash';
+import * as BooksAPI from '../BooksAPI'
 
 
 class BookSearch  extends Component {
     state = {
-        query: ''
+        query: '',
+        listBooks: []
     }
+
+    getBooksBasedOnSearch = _.debounce((query) => {
+        if(query) {
+            BooksAPI.search(query)
+            .then((allBooks) => {
+                if(allBooks instanceof Array) {
+                    this.setState({ listBooks: allBooks });
+                } 
+            })       
+        } 
+      }, 500);
+    
     searchBook = (e) => {
         this.setState({query: e.target.value}, () => {
-            this.props.getAllBooksFromApi(this.state.query);
+            this.getBooksBasedOnSearch(this.state.query);
         });
     }
     render() {
@@ -31,11 +46,13 @@ class BookSearch  extends Component {
                 </div>
                 <div className="search-books-results">
                 <ol className="books-grid">
-                    {this.props.books.length > 0 && this.props.books.map(book  => (
+                    {this.state.query && this.state.listBooks.length > 0 && 
+                    this.state.listBooks.map(book  => (
                         <li key={book.id}>
                             <Book 
                                 book={book} 
                                 changeShelf={this.props.changeShelf}
+                                books = {this.state.listBooks}
                             />
                         </li>
                     ))}
