@@ -4,47 +4,29 @@ import { Route } from 'react-router-dom'
 import BookSearch from './components/BookSearch.js';
 import ListBooks from './components/ListBooks.js';
 import './App.css';
-import _ from 'lodash';
 
 class BooksApp extends Component {
   
   state = {
-    books : [],
-    listAllCategoriesBooks: []
+    books : []
   }
 
   componentDidMount() {
     BooksAPI.getAll()
     .then(books => {
-      this.updateBooks(books);
+      this.setState({books})
     })
   }
 
   changeShelf = (book, shelf) => {
     BooksAPI.update(book, shelf)
-    .then(() => {
-      let referenceBooks = this.state.books;
-      let refIndex = referenceBooks.findIndex(refBook => 
-        refBook.id === book.id);
-      referenceBooks[refIndex].shelf = shelf;
-      this.updateBooks(referenceBooks);
+    .then((res) => {
+      return BooksAPI.getAll()
+    })
+    .then(allBooks => {
+      this.setState({books : allBooks});
     })
   }
-
-  updateBooks = (books) => {
-    this.setState({books})
-  }
-
-  getAllBooksFromApi = _.debounce((query) => {
-    BooksAPI.search(query)
-    .then(books => {
-      if (books instanceof Array) {
-        this.setState({ listAllCategoriesBooks: books });
-      } else {
-        this.setState({ listAllCategoriesBooks: [] });
-      }
-    });
-  }, 500);
 
   render() {
     return (
@@ -57,7 +39,7 @@ class BooksApp extends Component {
       )} />
       <Route path='/search' render={() => (
         <BookSearch 
-          books={this.state.listAllCategoriesBooks} 
+          books={this.state.books} 
           getAllBooksFromApi={this.getAllBooksFromApi}
           changeShelf={this.changeShelf}
         />
