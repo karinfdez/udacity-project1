@@ -29,7 +29,7 @@ const BookShelf = (props) => {
             currentlyReadingArray.push(book);
         } else if(book.shelf === wantToRead.bookCategory) {
             wantToReadArray.push(book);
-        } else {
+        } else if (book.shelf === read.bookCategory) {
             readArray.push(book);
         }
     })
@@ -49,12 +49,13 @@ const BookShelf = (props) => {
                 <BookCategory 
                     changeShelf={changeShelf} 
                     booksCategory={wantToReadArray} 
-                    category={wantToRead.name}
+                    category={wantToRead.name} 
                 />
                 <BookCategory 
                     changeShelf={changeShelf} 
                     booksCategory={readArray} 
                     category={read.name} 
+                   
                 />
             </div>
             </div>
