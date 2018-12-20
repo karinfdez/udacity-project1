@@ -49,13 +49,12 @@ const BookShelf = (props) => {
                 <BookCategory 
                     changeShelf={changeShelf} 
                     booksCategory={wantToReadArray} 
-                    category={wantToRead.name} 
+                    category={wantToRead.name}
                 />
                 <BookCategory 
                     changeShelf={changeShelf} 
                     booksCategory={readArray} 
-                    category={read.name} 
-                   
+                    category={read.name}
                 />
             </div>
             </div>

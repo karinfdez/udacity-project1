@@ -31,7 +31,6 @@ class BookSearch  extends Component {
                     this.setState({ listBooks: shelfedBooks });
                 } else {
                     console.log(allBooks.error);
-                    this.setState({ listBooks: [] });
                 }
             })
             .catch(error => {
@@ -70,7 +69,6 @@ class BookSearch  extends Component {
                             <Book 
                                 book={book} 
                                 changeShelf={this.props.changeShelf}
-                                books = {this.state.listBooks}
                             />
                         </li>
                     ))}
