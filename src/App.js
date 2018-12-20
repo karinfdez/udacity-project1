@@ -19,12 +19,16 @@ class BooksApp extends Component {
   }
 
   changeShelf = (updatedBook, shelf) => {
+    updatedBook.shelf = shelf;
+    BooksAPI.update(updatedBook, shelf)
     const id = updatedBook.id;
-    const books = this.state.books;
-    const specificBook = books.find(book => 
+    const listbooks = this.state.books;
+    const specificBook = listbooks.find(book => 
       book.id === id);
-    specificBook.shelf = shelf;
-    this.setState({books});
+      if (!specificBook) {
+        listbooks.push(updatedBook);
+      }
+      this.setState({books: listbooks})
   }
 
   render() {
