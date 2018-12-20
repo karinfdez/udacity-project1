@@ -29,8 +29,14 @@ class BookSearch  extends Component {
                 if(allBooks instanceof Array) {
                     const shelfedBooks = this.updateBooks(allBooks, this.props.books);
                     this.setState({ listBooks: shelfedBooks });
-                } 
-            })       
+                } else {
+                    console.log(allBooks.error);
+                    this.setState({ listBooks: [] });
+                }
+            })
+            .catch(error => {
+                console.log(error.message);
+            })     
         } 
       }, 50);
     
