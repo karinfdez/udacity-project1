@@ -11,16 +11,28 @@ class BookSearch  extends Component {
         listBooks: []
     }
 
+    updateBooks = (searchedBooks, categorizedBooks) => {
+        searchedBooks.forEach((searchBook) => {
+            const categoryBook = categorizedBooks.find((categoryBook) => 
+            categoryBook.id === searchBook.id)
+            if (categoryBook) {
+                searchBook.shelf = categoryBook.shelf
+            }
+        })
+        return searchedBooks;
+    }
+
     getBooksBasedOnSearch = _.debounce((query) => {
         if(query) {
             BooksAPI.search(query)
             .then((allBooks) => {
                 if(allBooks instanceof Array) {
-                    this.setState({ listBooks: allBooks });
+                    const shelfedBooks = this.updateBooks(allBooks, this.props.books);
+                    this.setState({ listBooks: shelfedBooks });
                 } 
             })       
         } 
-      }, 500);
+      }, 100);
     
     searchBook = (e) => {
         this.setState({query: e.target.value}, () => {
