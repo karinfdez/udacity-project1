@@ -32,7 +32,7 @@ class BookSearch  extends Component {
                 } 
             })       
         } 
-      }, 100);
+      }, 50);
     
     searchBook = (e) => {
         this.setState({query: e.target.value}, () => {
